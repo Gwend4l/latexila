@@ -92,6 +92,7 @@ int main (string[] args)
         return 0;
     }
 
+    #if !WIN32
     /* prepare commands */
     bool command_open = false;
     Unique.MessageData data = new Unique.MessageData ();
@@ -142,9 +143,10 @@ int main (string[] args)
             error ("Error: communication with first instance of LaTeXila failed\n");
         return 0;
     }
+    else
+    #endif
 
     /* start a new application */
-    else
     {
         Latexila latexila = Latexila.get_default ();
 
@@ -161,13 +163,20 @@ int main (string[] args)
         }
 
         /* execute commands */
+
+        #if !WIN32
         // the --new-window option have no effect in this case
         if (command_open)
             latexila.open_documents (data.get_uris ());
+        #endif
+
         if (option_new_document)
             latexila.create_document ();
 
+        #if !WIN32
         app.message_received.connect (latexila.message);
+        #endif
+
         Gtk.main ();
     }
 

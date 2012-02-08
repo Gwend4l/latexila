@@ -190,7 +190,10 @@ public class BuildToolRunner : GLib.Object
 
         foreach (uint handler in handlers)
             Source.remove (handler);
+
+        #if !WIN32
         Posix.kill (child_pid, Posix.SIGTERM);
+        #endif
 
         action_stop_exec.set_sensitive (false);
         view.set_partition_state (root_partition, PartitionState.ABORTED);

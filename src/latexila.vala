@@ -201,6 +201,7 @@ public class Latexila : GLib.Object
         return res;
     }
 
+    #if !WIN32
     public Unique.Response message (Unique.App sender, int command,
                                     Unique.MessageData data, uint time)
     {
@@ -243,6 +244,7 @@ public class Latexila : GLib.Object
         active_window.present_with_time (time);
         return Unique.Response.OK;
     }
+    #endif
 
     public MainWindow create_window (Gdk.Screen? screen = null)
     {

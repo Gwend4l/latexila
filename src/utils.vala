@@ -362,6 +362,7 @@ namespace Utils
 
         uint ret = ALL_WORKSPACES;
 
+        #if !WIN32
         Gdk.Window window = gtkwindow.get_window ();
         Gdk.Display display = window.get_display ();
         unowned X.Display x_display = Gdk.x11_display_get_xdisplay (display);
@@ -388,6 +389,8 @@ namespace Utils
             ret = workspace[0];
 
         X.free (workspace);
+        #endif
+
         return ret;
     }
 
