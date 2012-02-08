@@ -52,9 +52,15 @@ pkg_check_modules (GTKSOURCEVIEW REQUIRED "gtksourceview-2.0 >= 2.10")
 pkg_check_modules (GTKSPELL REQUIRED "gtkspell-2.0")
 pkg_check_modules (GEE REQUIRED "gee-1.0")
 pkg_check_modules (GIO REQUIRED "gio-2.0 >= 2.28")
-pkg_check_modules (UNIQUE REQUIRED "unique-1.0")
-pkg_check_modules (GDK-X11 REQUIRED "gdk-x11-2.0")
-pkg_check_modules (X11 REQUIRED "x11")
+pkg_check_modules (GDK REQUIRED "gdk-2.0")
+
+if (UNIX)
+	pkg_check_modules (UNIQUE REQUIRED "unique-1.0")
+	pkg_check_modules (X11 REQUIRED "x11")
+else ()
+	set (VALAC_CONDITIONALCOMPILATION_WIN32 -D WIN32) # To remove UNIX-specific code
+	set(CMAKE_C_FLAGS -DG_FORMAT_SIZE_DEFAULT) # Hack: GLib version problem under Win32
+endif ()
 
 if (WITH_GNOME)
 	pkg_check_modules (DESKTOP-SCHEMAS REQUIRED "gsettings-desktop-schemas")
@@ -74,7 +80,7 @@ add_definitions (
 	${GEE_CFLAGS}
 	${GIO_CFLAGS}
 	${UNIQUE_CFLAGS}
-	${GDK-X11_CFLAGS}
+	${GDK_CFLAGS}
 	${X11_CFLAGS}
 )
 
@@ -85,8 +91,19 @@ link_libraries (
 	${GEE_LIBRARIES}
 	${GIO_LIBRARIES}
 	${UNIQUE_LIBRARIES}
-	${GDK-X11_LIBRARIES}
+	${GDK_LIBRARIES}
 	${X11_LIBRARIES}
+)
+
+link_directories(
+	${GTK_LIBRARY_DIRS}
+	${GTKSOURCEVIEW_LIBRARY_DIRS}
+	${GTKSPELL_LIBRARY_DIRS}
+	${GEE_LIBRARY_DIRS}
+	${GIO_LIBRARY_DIRS}
+	${UNIQUE_LIBRARY_DIRS}
+	${GDK_LIBRARY_DIRS}
+	${X11_LIBRARY_DIRS}
 )
 
 include ("${latexila_SOURCE_DIR}/cmake/itstool.cmake")

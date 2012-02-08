@@ -17,6 +17,8 @@ vala_precompile (
 		${vapi_files}
 	DIRECTORY
 		"C"
+	OPTIONS
+		${VALAC_CONDITIONALCOMPILATION_WIN32}
 )
 
 add_executable (latexila ${VALA_C})
